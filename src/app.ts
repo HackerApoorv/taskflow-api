@@ -1,14 +1,8 @@
 import express from "express";
+import healthRoutes from "./routes/health.route.js";
 
 const app = express();
 
-app.use(express.json());
-
-app.get("/", (_req, res) => {
-  res.json({
-    message: "TaskFlow API is running 🚀",
-    version: "1.0.0",
-  });
-});
+app.use("/api", healthRoutes);
 
 export default app;
