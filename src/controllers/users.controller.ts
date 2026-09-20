@@ -26,3 +26,24 @@ export const createUser = (req: Request, res: Response) => {
   users.push(newUser);
   res.status(201).json(newUser);
 };
+
+export const updateUser = (req: Request<{id: string}>, res: Response) => {
+  const userId = parseInt(req.params.id);
+  const { name, email } = req.body;
+  const userIndex = users.findIndex((u) => u.id === userId);
+  if (userIndex === -1) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  users[userIndex] = { ...users[userIndex], name, email };
+  res.json(users[userIndex]);
+};
+
+export const deleteUser = (req: Request<{id: string}>, res: Response) => {
+  const userId = parseInt(req.params.id);
+  const userIndex = users.findIndex((u) => u.id === userId);
+  if (userIndex === -1) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  users.splice(userIndex, 1);
+  res.json({ message: 'User deleted successfully' });
+};
