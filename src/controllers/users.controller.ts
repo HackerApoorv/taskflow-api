@@ -48,3 +48,44 @@ export const deleteUser = async (req: Request<{id: string}>, res: Response) => {
   }).delete();
   res.status(204).send();
 };
+
+
+export const updateUser = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
+  const userId = parseInt(req.params.id);
+  const { name, email } = req.body;
+
+  // 1. Validate request
+  if (!name.trim() || !email.trim()) {
+    return res.status(400).json({
+      message: "Name and email are required",
+    });
+  }
+
+  // 2. Check existence
+  const user = await db.orm.public.User.first({ id: userId });
+
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
+    }); 
+  }
+
+  // 3. Database update
+  try {
+    const updatedUser = await db.orm.public.User.where({
+      id: userId,
+    }).update({
+      name,
+      email,
+    });
+
+    return res.json(updatedUser);
+  } catch (error) {
+    return res.status(409).json({
+      message: "Email already exists",
+    });
+  }
+};
