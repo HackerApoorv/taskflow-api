@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { db } from '../prisma/db.js';
-import * as userService from '../services/user.service.js';
+import * as userService from '../services/user.services.js';
 
 // "12" -> 12, but "12abc", "0", "-1", "abc" -> null
 function parseId(raw: string): number | null {
