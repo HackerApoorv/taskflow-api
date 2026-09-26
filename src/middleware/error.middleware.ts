@@ -1,14 +1,23 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from 'express';
+import { AppError, type ErrorCode } from '../errors/app-error.js';
+
+const statusByCode: Record<ErrorCode, number> = {
+  USER_NOT_FOUND: 404,
+  EMAIL_TAKEN: 409,
+  DOMAIN_BLOCKED: 403,
+};
 
 export function errorMiddleware(
   error: unknown,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
 ): void {
-  console.error(error);
+  if (error instanceof AppError) {
+    res.status(statusByCode[error.code]).json({ error: error.message });
+    return;
+  }
 
-  res.status(500).json({
-    message: "Internal Server Error",
-  });
+  console.error(error);
+  res.status(500).json({ error: 'Internal Server Error' });
 }
