@@ -1,8 +1,7 @@
 import type { Request, Response } from 'express';
-import { db } from '../prisma/db.js';
-import * as userService from '../services/user.services.js';
+import * as userService from '../services/user.service.js';
 
-// "12" -> 12, but "12abc", "0", "-1", "abc" -> null
+
 function parseId(raw: string): number | null {
   if (!/^\d+$/.test(raw)) return null;
   const id = Number(raw);
@@ -46,40 +45,31 @@ export const createUser = async (req: Request, res: Response) => {
   res.status(201).json(user);
 };
 
-// ─── TODO (your task): move these two into the service ───────────────
+export const deleteUser = async (req: Request<{ id: string }>, res: Response) => {
+  const userId = parseId(req.params.id);
+  if (userId === null) {
+    return res.status(400).json({ error: 'Invalid id' });
+  }
 
-export const deleteUser = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  const userId = parseInt(req.params.id);
-  await db.orm.public.User.where({ id: userId }).delete();
+  await userService.deleteUser(userId);
   res.status(204).send();
 };
+
 
 export const updateUser = async (
   req: Request<{ id: string }>,
   res: Response,
 ) => {
-  const userId = parseInt(req.params.id);
-  const { name, email } = req.body;
+  const userId = parseId(req.params.id);
+  if (userId === null) {
+    return res.status(400).json({ error: 'Invalid id' });
+  }
+  const { name, email } = req.body ?? {};
 
-  if (!name.trim() || !email.trim()) {
+  if (!isNonEmptyString(name) || !isNonEmptyString(email)) {
     return res.status(400).json({ error: 'Name and email are required' });
   }
 
-  const user = await db.orm.public.User.first({ id: userId });
-  if (!user) {
-    return res.status(404).json({ error: 'User not found' });
-  }
-
-  try {
-    const updatedUser = await db.orm.public.User.where({ id: userId }).update({
-      name,
-      email,
-    });
-    return res.json(updatedUser);
-  } catch (error) {
-    return res.status(409).json({ error: 'Email already exists' });
-  }
+  const user = await userService.updateUser(userId, { name, email });
+  res.json(user);
 };
