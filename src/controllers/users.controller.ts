@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { db } from '../prisma/db';
+import { db } from '../prisma/db.js';
 
 export const getUsers = async (_req: Request, res: Response) => {
   const users = await db.orm.public.User.all();

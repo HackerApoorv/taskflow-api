@@ -4,11 +4,11 @@
   "target": "postgres",
   "profileHash": "3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2",
   "roots": {
-    "post": {
+    "Post": {
       "model": "Post",
       "namespace": "public"
     },
-    "user": {
+    "User": {
       "model": "User",
       "namespace": "public"
     }
@@ -102,7 +102,7 @@
                 }
               },
               "namespaceId": "public",
-              "table": "post"
+              "table": "Post"
             }
           },
           "User": {
@@ -189,7 +189,7 @@
                 }
               },
               "namespaceId": "public",
-              "table": "user"
+              "table": "User"
             }
           }
         }
@@ -201,7 +201,7 @@
       "public": {
         "entries": {
           "table": {
-            "post": {
+            "Post": {
               "columns": {
                 "authorId": {
                   "codecId": "pg/int4@1",
@@ -249,14 +249,14 @@
                       "authorId"
                     ],
                     "namespaceId": "public",
-                    "tableName": "post"
+                    "tableName": "Post"
                   },
                   "target": {
                     "columns": [
                       "id"
                     ],
                     "namespaceId": "public",
-                    "tableName": "user"
+                    "tableName": "User"
                   }
                 }
               ],
@@ -265,8 +265,8 @@
                   "columns": [
                     "authorId"
                   ],
-                  "name": "post_authorId_idx_e47547ed",
-                  "prefix": "post_authorId_idx",
+                  "name": "Post_authorId_idx_e47547ed",
+                  "prefix": "Post_authorId_idx",
                   "unique": false
                 }
               ],
@@ -277,7 +277,7 @@
               },
               "uniques": []
             },
-            "user": {
+            "User": {
               "columns": {
                 "createdAt": {
                   "codecId": "pg/timestamptz-string@1",
@@ -339,10 +339,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "1e8412e162dbbe69f4bb3bf8d07f0280ae67eaab15c34dcf201e67468315428d"
+    "storageHash": "91e7f9f035806fa2789a4d726ef7724cad434fd6b00014d47ebf12d6e6bb784e"
   },
   "execution": {
-    "executionHash": "4abff323cc88151ef9c9a0ec90122cfee6d46814a118cdb66a9fdd94a4123463",
+    "executionHash": "796fa270d853489edb1c3e0d332d596412292127a259b856b495a498c752882a",
     "mutations": {
       "defaults": [
         {
@@ -357,7 +357,7 @@
           "ref": {
             "column": "updatedAt",
             "namespace": "public",
-            "table": "post"
+            "table": "Post"
           }
         },
         {
@@ -372,7 +372,7 @@
           "ref": {
             "column": "updatedAt",
             "namespace": "public",
-            "table": "user"
+            "table": "User"
           }
         }
       ]
@@ -391,6 +391,8 @@
       "checkConstraint": true,
       "defaultInInsert": true,
       "enums": true,
+      "insertOnConflictSkip": true,
+      "insertOnConflictWithoutTarget": true,
       "lateral": true,
       "returning": true,
       "scalarList": true
